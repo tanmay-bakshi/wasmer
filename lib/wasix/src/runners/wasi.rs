@@ -225,7 +225,7 @@ impl WasiRunner {
         pkg: Option<&BinaryPackage>,
         runtime: Arc<dyn Runtime + Send + Sync>,
         root_fs: Option<TmpFileSystem>,
-        content: &[u8],
+        content: &'static [u8],
     ) -> Result<WasiEnvBuilder, anyhow::Error> {
         let mut builder = WasiEnvBuilder::new(program_name).runtime(runtime);
 
