@@ -259,10 +259,11 @@ impl WasiRunner {
         module: &Module,
         module_hash: ModuleHash,
         asyncify: bool,
+        root_fs: Option<TmpFileSystem>,
     ) -> Result<(), Error> {
-        let wasi = webc::metadata::annotations::Wasi::new(program_name);
+        let wasi = Wasi::new(program_name);
         let mut store = runtime.new_store();
-        let env = self.prepare_webc_env(program_name, &wasi, None, runtime, None)?;
+        let env = self.prepare_webc_env(program_name, &wasi, None, runtime, root_fs)?;
 
         if asyncify {
             env.run_with_store_async(module.clone(), module_hash, store)?;
