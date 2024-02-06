@@ -300,7 +300,7 @@ impl crate::runners::Runner for WasiRunner {
 
         #[allow(unused_mut)]
         let mut env = self
-            .prepare_webc_env(command_name, &wasi, Some(pkg), Arc::clone(&runtime), None)
+            .prepare_webc_env(command_name, &wasi, Some(pkg), Arc::clone(&runtime), None, &[])
             .context("Unable to prepare the WASI environment")?;
 
         #[cfg(feature = "journal")]

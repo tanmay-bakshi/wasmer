@@ -55,7 +55,7 @@ impl CommonWasiOptions {
         content: &[u8],
     ) -> Result<(), anyhow::Error> {
         let root_fs = root_fs.unwrap_or_else(|| RootFileSystemBuilder::default().build());
-        root_fs.new_open_options_ext().insert_ro_file("/azul_function_input".parse()?, content.into())?;
+        root_fs.new_open_options_ext().insert_ro_file(Path::new("/azul_function_input"), content.into())?;
         let fs = prepare_filesystem(root_fs, &self.mounts, container_fs)?;
 
         builder.add_preopen_dir("/")?;

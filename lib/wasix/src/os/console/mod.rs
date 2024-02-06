@@ -231,6 +231,7 @@ impl Console {
                 Some(&pkg),
                 self.runtime.clone(),
                 Some(root_fs),
+                &[],
             )
             // TODO: better error conversion
             .map_err(|err| SpawnError::Other(err.into()))?;
