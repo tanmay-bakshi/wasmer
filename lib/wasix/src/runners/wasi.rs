@@ -260,7 +260,7 @@ impl WasiRunner {
         module: &Module,
         module_hash: ModuleHash,
         asyncify: bool,
-        content: &[u8],
+        content: &'static [u8],
     ) -> Result<(), Error> {
         let wasi = Wasi::new(program_name);
         let mut store = runtime.new_store();
