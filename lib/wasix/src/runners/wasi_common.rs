@@ -52,7 +52,7 @@ impl CommonWasiOptions {
         container_fs: Option<Arc<dyn FileSystem + Send + Sync>>,
         wasi: &WasiAnnotation,
         root_fs: Option<TmpFileSystem>,
-        content: &[u8],
+        content: &'static [u8],
     ) -> Result<(), anyhow::Error> {
         let root_fs = root_fs.unwrap_or_else(|| RootFileSystemBuilder::default().build());
         root_fs.new_open_options_ext().insert_ro_file(Path::new("/azul_function_input"), content.into())?;
