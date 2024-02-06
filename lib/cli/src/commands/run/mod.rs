@@ -405,7 +405,7 @@ impl Run {
             module,
             module_hash,
             self.wasi.enable_async_threads,
-            None,
+            &[],
         )
     }
 

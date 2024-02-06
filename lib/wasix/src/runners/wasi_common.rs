@@ -7,6 +7,7 @@ use std::{
 use anyhow::{Context, Error};
 use derivative::Derivative;
 use futures::future::BoxFuture;
+use tokio::io::AsyncWriteExt;
 use virtual_fs::{FileSystem, FsError, OverlayFileSystem, RootFileSystemBuilder, TmpFileSystem};
 use wasmer::Imports;
 use webc::metadata::annotations::Wasi as WasiAnnotation;
@@ -51,8 +52,10 @@ impl CommonWasiOptions {
         container_fs: Option<Arc<dyn FileSystem + Send + Sync>>,
         wasi: &WasiAnnotation,
         root_fs: Option<TmpFileSystem>,
+        content: &[u8],
     ) -> Result<(), anyhow::Error> {
         let root_fs = root_fs.unwrap_or_else(|| RootFileSystemBuilder::default().build());
+        root_fs.new_open_options_ext().insert_ro_file("/azul_function_input".parse()?, content.into())?;
         let fs = prepare_filesystem(root_fs, &self.mounts, container_fs)?;
 
         builder.add_preopen_dir("/")?;

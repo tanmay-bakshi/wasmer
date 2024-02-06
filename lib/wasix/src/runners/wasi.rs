@@ -225,6 +225,7 @@ impl WasiRunner {
         pkg: Option<&BinaryPackage>,
         runtime: Arc<dyn Runtime + Send + Sync>,
         root_fs: Option<TmpFileSystem>,
+        content: &[u8],
     ) -> Result<WasiEnvBuilder, anyhow::Error> {
         let mut builder = WasiEnvBuilder::new(program_name).runtime(runtime);
 
@@ -237,7 +238,7 @@ impl WasiRunner {
         };
 
         self.wasi
-            .prepare_webc_env(&mut builder, container_fs, wasi, root_fs)?;
+            .prepare_webc_env(&mut builder, container_fs, wasi, root_fs, content)?;
 
         if let Some(stdin) = &self.stdin {
             builder.set_stdin(Box::new(stdin.clone()));
@@ -259,11 +260,11 @@ impl WasiRunner {
         module: &Module,
         module_hash: ModuleHash,
         asyncify: bool,
-        root_fs: Option<TmpFileSystem>,
+        content: &[u8],
     ) -> Result<(), Error> {
         let wasi = Wasi::new(program_name);
         let mut store = runtime.new_store();
-        let env = self.prepare_webc_env(program_name, &wasi, None, runtime, root_fs)?;
+        let env = self.prepare_webc_env(program_name, &wasi, None, runtime, None, content)?;
 
         if asyncify {
             env.run_with_store_async(module.clone(), module_hash, store)?;
